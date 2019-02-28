@@ -19,52 +19,76 @@ declare(strict_types=1);
 namespace jacknoordhuis\minecraftpacketdebugger\lib\network\raknet;
 
 use jacknoordhuis\minecraftpacketdebugger\lib\network\NetworkLogger;
-use jacknoordhuis\minecraftpacketdebugger\lib\utils\Utils;
 use pocketmine\network\mcpe\protocol\DataPacket;
 use raklib\protocol\AcknowledgePacket;
 use raklib\protocol\EncapsulatedPacket;
 use raklib\protocol\OfflineMessage;
 
-class RakNetLogger implements NetworkLogger {
-
-	public function logAcknowledgement(AcknowledgePacket $packet, bool $serverSide) : void {
-		$this->log("Received acknowledgement message '" . Utils::getShortClassName($packet) . "' ({$packet::$ID}) from " . ($serverSide ? "server" : "client"));
-	}
-
-	public function logMinecraft(DataPacket $pk, bool $serverSide) : void {
-		$this->log("Received minecraft packet " . Utils::getShortClassName($pk) . " from " . ($serverSide ? "server" : "client"));
-	}
-
-	public function logUnknownMinecraft(EncapsulatedPacket $packet, bool $serverSide) : void {
-		$this->log("Received unknown minecraft packet from " . ($serverSide ? "server" : "client") . ": " . bin2hex($packet->buffer));
-	}
-
-	public function logOffline(OfflineMessage $message, bool $serverSide) : void {
-		$this->log("Received offline message '" . Utils::getShortClassName($message) . "' ({$message::$ID}) from " . ($serverSide ? "server" : "client"));
-	}
-
-	public function logConnectedOffline(OfflineMessage $message, bool $serverSide) : void {
-		$this->log("Received offline message '" . Utils::getShortClassName($message) . "' ({$message::$ID}) from " . ($serverSide ? "server" : "client") . " when session is already open");
-	}
-
-	public function logOfflineConnected(string $buffer, bool $serverSide) : void {
-		$this->log("Received connected message from " . ($serverSide ? "server" : "client") . " when session is not open: " . bin2hex($buffer));
-	}
-
-	public function logUnknownConnectedOffline(string $buffer, bool $serverSide) : void {
-		$this->log("Received unknown offline message from " . ($serverSide ? "server" : "client") . " when session is already open: " . bin2hex($buffer));
-	}
-
-	public function logRaw(string $buffer, bool $serverSide) : void {
-		$this->log("Received raw message from " . ($serverSide ? "server" : "client") . ": " . bin2hex($buffer));
-	}
+abstract class RakNetLogger implements NetworkLogger {
 
 	/**
-	 * @inheritdoc
+	 * Called when we receive an ACK or NACK.
+	 *
+	 * @param \raklib\protocol\AcknowledgePacket $packet
+	 * @param bool                               $serverSide
 	 */
-	public function log(string $raw) : void {
-		echo $raw . PHP_EOL;
-	}
+	abstract public function logAcknowledgement(AcknowledgePacket $packet, bool $serverSide) : void;
+
+	/**
+	 * Called when we receive an encapsulated packet from a datagram.
+	 *
+	 * @param \pocketmine\network\mcpe\protocol\DataPacket $pk
+	 * @param bool                                         $serverSide
+	 */
+	abstract public function logMinecraft(DataPacket $pk, bool $serverSide) : void;
+
+	/**
+	 * Called when we receive an unknown encapsulated packet from a datagram.
+	 *
+	 * @param \raklib\protocol\EncapsulatedPacket $packet
+	 * @param bool                                $serverSide
+	 */
+	abstract public function logUnknownMinecraft(EncapsulatedPacket $packet, bool $serverSide) : void;
+
+	/**
+	 * Called when we receive an offline message.
+	 *
+	 * @param \raklib\protocol\OfflineMessage $message
+	 * @param bool                            $serverSide
+	 */
+	abstract public function logOffline(OfflineMessage $message, bool $serverSide) : void;
+
+	/**
+	 * Called when we receive an offline message from an open session.
+	 *
+	 * @param \raklib\protocol\OfflineMessage $message
+	 * @param bool                            $serverSide
+	 */
+	abstract public function logConnectedOffline(OfflineMessage $message, bool $serverSide) : void;
+
+	/**
+	 * Called when we receive a connected datagram without an open session.
+	 *
+	 * @param string $buffer
+	 * @param bool   $serverSide
+	 */
+	abstract public function logOfflineConnected(string $buffer, bool $serverSide) : void;
+
+	/**
+	 * Called when we receive an unknown offline message.
+	 *
+	 * @param string $buffer
+	 * @param bool   $serverSide
+	 */
+	abstract public function logUnknownConnectedOffline(string $buffer, bool $serverSide) : void;
+
+	/**
+	 * Called when we receive a raw message (status query).
+	 *
+	 * @param string $buffer
+	 * @param bool   $serverSide
+	 */
+	abstract public function logRaw(string $buffer, bool $serverSide) : void;
 
 	/**
 	 * @inheritdoc
