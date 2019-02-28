@@ -45,7 +45,7 @@ class StartSimpleDebugProxy extends Command {
 			->setDescription("Starts a basic debug proxy server.")
 			->addOption("server", "s", InputOption::VALUE_REQUIRED, "The server that client packets will be forwarded to in the format 'ip:port' (192.168.0.6:19132).")
 			->addOption("bind", "b", InputOption::VALUE_REQUIRED, "The address to start the proxy server on, in the format 'ip:port' (127.0.0.1:19132).")
-			->addOption("logger", "l", InputOption::VALUE_REQUIRED, "Set the logger type (file, echo)")
+			->addOption("logger", "l", InputOption::VALUE_REQUIRED, "Set the logger type (file, echo)", "echo")
 			->addOption("log-file", "f", InputOption::VALUE_REQUIRED, "Set the file loggers log file.");
 	}
 
@@ -112,10 +112,6 @@ class StartSimpleDebugProxy extends Command {
 
 	private function createLogger(InputInterface $input, SymfonyStyle $io) : ?RakNetLogger {
 		$raw = $input->getOption("logger");
-
-		if($raw === null) { //if no logger is specified, just echo everything
-			$raw = "echo";
-		}
 
 		switch(strtolower($raw)) {
 			case "echo":
