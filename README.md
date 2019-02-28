@@ -13,7 +13,7 @@ modification.**
 ### Installation
 There are currently no releases for this tool so you'll have to clone from github and install composer dependencies yourself:
 ```bash
-$ git clone git@github.com:JackNoordhuis/MinecraftPacketDebugger.git && composer install
+$ git clone git@github.com:JackNoordhuis/MinecraftPacketDebugger.git && cd MinecraftPacketDebugger && composer install
 ```
 
 You will most likely run into errors running `composer install` with a normal php binary, you should install and use a
