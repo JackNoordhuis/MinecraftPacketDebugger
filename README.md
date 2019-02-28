@@ -2,6 +2,24 @@ MinecraftPacketDebugger
 ===============
 _PocketMine-MP based proxy for debugging minecraft network communication._
 
+### About
+This a tool designed to debug communication between a minecraft bedrock edition client and a bedrock edition server. It
+is not intended to be used as a traditional proxy and most normal servers will not allow you to connect using this tool
+([see pitfalls](#pitfalls)).
+
+**This tool was created to assist with debugging and testing a custom built proxy so it may not fulfil your use case without
+modification.**
+
+### Installation
+There are currently no releases for this tool so you'll have to clone from github and install composer dependencies yourself:
+```bash
+$ git clone git@github.com:JackNoordhuis/MinecraftPacketDebugger.git && composer install
+```
+
+You will most likely run into errors running `composer install` with a normal php binary, you should install and use a
+[pre-compiled binary](https://pmmp.readthedocs.io/en/rtfd/links.html#prebuilt-php-binaries-and-related-packages) provided
+by @pmmp as it comes with all the extensions required to run PocketMine.
+
 ### Usage
 Currently there is only a simple script to start a debugging server and it will only log RakNet packets (minecraft level and filters coming soon).
 You must provide the ip and port for the target server (PocketMine, Nukkit, BDS, etc) and the ip and port for the debug
