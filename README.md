@@ -8,7 +8,7 @@ You must provide the ip and port for the target server (PocketMine, Nukkit, BDS,
 proxy to bind to:
 
 ```bash
-$ php entry.php --server 127.0.0.1:19132 --bind 0.0.0.0:19130
+$ php debugger --server 127.0.0.1:19132 --bind 0.0.0.0:19130
 ```
 
 You will only be able to connect to servers with port checking disabled, so connecting to most external servers will not

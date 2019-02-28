@@ -66,9 +66,11 @@ class MinecraftPacketDebugger {
 
 	/**
 	 * Tell the server to start processing packets.
+	 *
+	 * @param \jacknoordhuis\minecraftpacketdebugger\lib\network\raknet\RakNetLogger $logger
 	 */
-	public function start() : void {
-		$this->interface = new RakNetInterface($this, new RakNetLogger());
+	public function start(RakNetLogger $logger) : void {
+		$this->interface = new RakNetInterface($this, $logger);
 
 		$this->run();
 	}
