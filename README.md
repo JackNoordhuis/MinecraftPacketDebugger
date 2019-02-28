@@ -8,7 +8,7 @@ You must provide the ip and port for the target server (PocketMine, Nukkit, BDS,
 proxy to bind to:
 
 ```bash
-$ php debugger --server 127.0.0.1:19132 --bind 0.0.0.0:19130
+$ php debugger simple --server 127.0.0.1:19132 --bind 0.0.0.0:19130
 ```
 
 ### Pitfalls
