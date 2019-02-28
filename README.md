@@ -3,13 +3,29 @@ MinecraftPacketDebugger
 _PocketMine-MP based proxy for debugging minecraft network communication._
 
 ### Usage
-Currently there is only a simple script to start a debugging server and it will log RakNet packets to the command line.
+Currently there is only a simple script to start a debugging server and it will only log RakNet packets (minecraft level and filters coming soon).
 You must provide the ip and port for the target server (PocketMine, Nukkit, BDS, etc) and the ip and port for the debug
 proxy to bind to:
 
 ```bash
 $ php debugger simple --server 127.0.0.1:19132 --bind 0.0.0.0:19130
 ```
+
+Or using shortcut options:
+
+```bash
+$ php debugger simple -s 127.0.0.1:19132 -b 0.0.0.0:19130
+```
+
+##### Loggers
+
+You can also specify which logging mechanism to use. Currently only echo (to command line) and file loggers are supported:
+
+```bash
+$ php debugger simple -s 127.0.0.1:19132 -b 0.0.0.0:19130 -l file -f ~/MinecraftNetworkDebugger/debug-1.log
+```
+
+The default logger is set to echo. If you use the file logger you *must* specify the full path to the log file.
 
 ### Pitfalls
 
