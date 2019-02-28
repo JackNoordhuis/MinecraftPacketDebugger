@@ -18,20 +18,44 @@ declare(strict_types=1);
 
 namespace jacknoordhuis\minecraftpacketdebugger\lib\network;
 
-interface NetworkLogger {
+abstract class NetworkLogger {
+
+	/** @var \jacknoordhuis\minecraftpacketdebugger\lib\network\NetworkFilter */
+	protected $filter;
+
+	/**
+	 * Get the filter for this logger.
+	 *
+	 * @return \jacknoordhuis\minecraftpacketdebugger\lib\network\NetworkFilter
+	 */
+	public function getFilter() : NetworkFilter {
+		return $this->filter;
+	}
 
 	/**
 	 * Retrieve the name/protocol name of the network interface being logged.
 	 *
 	 * @return string
 	 */
-	public function getInterfaceName() : string;
+	abstract public function getInterfaceName() : string;
 
 	/**
 	 * Log the message/data to the output destination.
 	 *
 	 * @param string $raw
+	 * @param int    $filter_flag
 	 */
-	public function log(string $raw) : void;
+	public function log(string $raw, int $filter_flag) : void {
+		if($this->filter->getFlag($filter_flag)) {
+			$this->doLog($raw);
+		}
+	}
+
+	/**
+	 * Perform the actual logging (file io, console message, etc).
+	 *
+	 * @param string $raw
+	 */
+	abstract protected function doLog(string $raw) : void;
 
 }

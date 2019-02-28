@@ -18,22 +18,22 @@ declare(strict_types=1);
 
 namespace jacknoordhuis\minecraftpacketdebugger\cli\commands;
 
-use function explode;
 use InvalidArgumentException;
-use jacknoordhuis\minecraftpacketdebugger\cli\loggers\EchoLogger;
-use jacknoordhuis\minecraftpacketdebugger\cli\loggers\FileLogger;
+use jacknoordhuis\minecraftpacketdebugger\cli\loggers\raknet\EchoLogger;
+use jacknoordhuis\minecraftpacketdebugger\cli\loggers\raknet\FileLogger;
 use jacknoordhuis\minecraftpacketdebugger\lib\MinecraftPacketDebugger;
 use jacknoordhuis\minecraftpacketdebugger\lib\network\raknet\RakNetLogger;
 use jacknoordhuis\minecraftpacketdebugger\lib\utils\Utils;
 use raklib\utils\InternetAddress;
 use RuntimeException;
-use function str_repeat;
-use function strtolower;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function explode;
+use function str_repeat;
+use function strtolower;
 
 /**
  * Starts a basic debug proxy server.
@@ -57,8 +57,8 @@ class StartSimpleDebugProxy extends Command {
 		$server = $bind = null;
 		foreach(
 			[
-			"server",
-			"bind"
+				"server",
+				"bind",
 			] as $option) {
 			if(($error = $this->createAddress($input, $option, $address)) !== null) {
 				$io->error($error);
@@ -74,7 +74,7 @@ class StartSimpleDebugProxy extends Command {
 		}
 
 		$io->writeln(str_repeat("-", 70));
-		$io->writeln( "<info>Starting minecraft bedrock network debug proxy on {$bind->ip}:{$bind->port}...</>");
+		$io->writeln("<info>Starting minecraft bedrock network debug proxy on {$bind->ip}:{$bind->port}...</>");
 		$io->writeln("");
 
 		(new MinecraftPacketDebugger($server, $bind))
@@ -102,7 +102,7 @@ class StartSimpleDebugProxy extends Command {
 		}
 
 		try {
-			$output = Utils::addressFromHostname($parts[0], (int) $parts[1]);
+			$output = Utils::addressFromHostname($parts[0], (int)$parts[1]);
 		} catch(InvalidArgumentException $e) {
 			return "A port must be in the range of 0 to 65536, {$parts[1]} given.";
 		}
@@ -110,6 +110,14 @@ class StartSimpleDebugProxy extends Command {
 		return null;
 	}
 
+	/**
+	 * Create a logger from the input options.
+	 *
+	 * @param \Symfony\Component\Console\Input\InputInterface $input
+	 * @param \Symfony\Component\Console\Style\SymfonyStyle   $io
+	 *
+	 * @return \jacknoordhuis\minecraftpacketdebugger\lib\network\raknet\RakNetLogger|null
+	 */
 	private function createLogger(InputInterface $input, SymfonyStyle $io) : ?RakNetLogger {
 		$raw = $input->getOption("logger");
 

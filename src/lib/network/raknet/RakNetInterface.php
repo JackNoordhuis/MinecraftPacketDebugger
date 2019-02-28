@@ -125,7 +125,7 @@ class RakNetInterface {
 					/** @var OfflineMessage $pk */
 					$this->logger->logConnectedOffline($pk, $fromServer);
 				} else {
-					$this->logger->logUnknownConnectedOffline($buffer, $fromServer);
+					$this->logger->logUnknownOffline($buffer, $fromServer);
 				}
 			}
 		} elseif(($pk = PacketPool::getPacket($buffer)) instanceof OfflineMessage) {

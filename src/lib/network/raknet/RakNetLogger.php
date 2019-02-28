@@ -18,13 +18,17 @@ declare(strict_types=1);
 
 namespace jacknoordhuis\minecraftpacketdebugger\lib\network\raknet;
 
+use jacknoordhuis\minecraftpacketdebugger\lib\network\NetworkFilter;
 use jacknoordhuis\minecraftpacketdebugger\lib\network\NetworkLogger;
 use pocketmine\network\mcpe\protocol\DataPacket;
 use raklib\protocol\AcknowledgePacket;
 use raklib\protocol\EncapsulatedPacket;
 use raklib\protocol\OfflineMessage;
 
-abstract class RakNetLogger implements NetworkLogger {
+abstract class RakNetLogger extends NetworkLogger {
+
+	/** @var \jacknoordhuis\minecraftpacketdebugger\lib\network\raknet\RakNetFilter */
+	protected $filter;
 
 	/**
 	 * Called when we receive an ACK or NACK.
@@ -80,7 +84,7 @@ abstract class RakNetLogger implements NetworkLogger {
 	 * @param string $buffer
 	 * @param bool   $serverSide
 	 */
-	abstract public function logUnknownConnectedOffline(string $buffer, bool $serverSide) : void;
+	abstract public function logUnknownOffline(string $buffer, bool $serverSide) : void;
 
 	/**
 	 * Called when we receive a raw message (status query).
@@ -89,6 +93,13 @@ abstract class RakNetLogger implements NetworkLogger {
 	 * @param bool   $serverSide
 	 */
 	abstract public function logRaw(string $buffer, bool $serverSide) : void;
+
+	/**
+	 * @return \jacknoordhuis\minecraftpacketdebugger\lib\network\raknet\RakNetFilter|\jacknoordhuis\minecraftpacketdebugger\lib\network\NetworkFilter
+	 */
+	public function getFilter() : NetworkFilter {
+		return $this->filter;
+	}
 
 	/**
 	 * @inheritdoc
