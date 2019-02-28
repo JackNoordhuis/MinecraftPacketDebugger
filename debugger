@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 require_once file_exists(__DIR__.'/vendor/autoload.php') ?  __DIR__.'/vendor/autoload.php' : __DIR__.'/../../autoload.php';
 
-($app = new Symfony\Component\Console\Application())->addCommands([
+($app = new Symfony\Component\Console\Application("Minecraft Packet Debugger", "0.0.1-DEV#1"))->addCommands([
 	new jacknoordhuis\minecraftpacketdebugger\cli\commands\StartSimpleDebugProxy
 ]);
 
